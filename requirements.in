@@ -1,0 +1,7 @@
+Flask == 3.1.2
+Pandas
+psycopg2-binary
+openpyxl
+flask_sqlalchemy
+matplotlib
+flask_sqlalchemy

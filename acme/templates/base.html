@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Работа с Данными</title>
+</head>
+
+<h1> Работа с Данными csv</h1>
+
+<body>
+<form method=post enctype=multipart/form-data action="/upload">
+  <input type=file name=file>
+  <input type=submit value=Загрузить>
+</form>
+
+<h2>Доступные файлы для скачивания и удаления:</h2>
+{% if files %}
+    {% for filename in files %}
+        <div style="margin-bottom:10px;">
+            <a href="/upload/{{ filename }}" download>{{ filename }}</a>
+            <!-- форма для удаления файла -->
+            <form method="post" action="/delete/{{ filename }}" style="display:inline;">
+                <button type="submit">Удалить</button>
+            </form>
+
+            <!-- форма для очистки данных -->
+            <form method="post" action="/clean_data/{{ filename }}" style="display:inline;">
+                <button type="submit">Очистить данные</button>
+            </form>
+
+            <!-- форма для выбора колонок и запуска анализа -->
+            <form method="get" action="/analyze/{{ filename }}" style="display:inline;">
+                {% set columns = name_column_upload.get(filename, []) %}
+                <label for="column_upload"> выберети 1 </label>
+                <select name="column" id="column_upload" required>
+                    {% for col in columns %}
+                    <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                            <!-- Кнопка для запуска анализа -->
+                <button type="submit">Запустить анализ</button>
+            </form>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Нет файлов для скачивания.</p>
+{% endif %}
+
+<h2>Настройки подключения к базе данных</h2>
+    <form method="post" action="/set_params">
+        <label>Хост:</label>
+        <input type="text" name="host" required><br>
+        <label>Порт:</label>
+        <input type="number" name="port" value="5432" required><br>
+        <label>База данных:</label>
+        <input type="text" name="database" required><br>
+        <label>Пользователь:</label>
+        <input type="text" name="user" required><br>
+        <label>Пароль:</label>
+        <input type="password" name="password" required><br>
+        <label>Название таблицы:</label>
+        <input type="text" name="table_name" required><br>
+        <button type="submit">Задать параметры</button>
+    </form>
+
+<h3>Действия</h3>
+    <a href="/download_table"><button type="submit">Скачать таблицу</button> </a>
+
+    <!-- блок для отображения анализа -->
+{% for filename in files %}
+    {% if analyze_results_upload and analyze_results_upload.get(filename) %}
+        <h3>Результаты анализа: для {{ filename }}</h3>
+            <ul>
+                <li>Среднее: {{ analyze_results_upload[filename].mean }}</li>
+                <li>Медиана: {{ analyze_results_upload[filename].median }}</li>
+                <li>Коэффициент корреляции: {{ analyze_results_upload[filename].correlation }}</li>
+            </ul>
+
+        <h3>Дополнительные действия</h3>
+        <h3>График по выбранным колонкам</h3>
+
+        <!-- Колонка 1 -->
+        <form method="get" action="/plot/{{ filename }}" target="_blank" style="display:inline;">
+            {% set columns = name_column_upload.get(filename, []) %}
+            <label for="column1"> выберети 1 </label>
+                <select name="column1" id="column1" required>
+                    {% for col1 in columns %}
+                    <option value="{{ col1 }}">{{ col1 }}</option>
+                    {% endfor %}
+                </select>
+            <p>
+        <!-- Колонка 2 -->
+            <label for="column2"> выберети 2 </label>
+                <select name="column2" id="column2" required>
+                    {% for col2 in columns %}
+                    <option value="{{ col2 }}">{{ col2 }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <button type="submit">Отобразить график</button>
+        </form>
+
+    {% endif %}
+{% endfor %}
+
+
+{% block content %}
+
+{% endblock %}
+
+
+</body>
+</html>
