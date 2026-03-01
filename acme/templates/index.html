@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>API Data Service</title>
+</head>
+<body>
+    <h1>Загрузка файла</h1>
+    <form id="uploadForm">
+        <input type="file" id="fileInput" name="file" required />
+        <button type="submit">Загрузить</button>
+    </form>
+    <hr />
+
+    <h2>Получить статистику</h2>
+    <input type="text" id="statsFilename" placeholder="Имя файла" />
+    <button id="getStatsBtn">Получить статистику</button>
+    <pre id="statsResult"></pre>
+
+    <hr />
+
+    <h2>Очистить данные</h2>
+    <input type="text" id="cleanFilename" placeholder="Имя файла" />
+    <button id="cleanBtn">Очистить</button>
+    <p id="cleanResult"></p>
+
+    <hr />
+
+    <h2>Построить график</h2>
+    <input type="text" id="plotFilename" placeholder="Имя файла" />
+    <input type="text" id="colX" placeholder="Колонка X" />
+    <input type="text" id="colY" placeholder="Колонка Y" />
+    <button id="plotBtn">Построить график</button>
+    <br/><br/>
+    <img id="plotImage" src="" alt="График" />
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

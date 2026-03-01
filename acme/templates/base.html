@@ -28,6 +28,9 @@
                 <button type="submit">Очистить данные</button>
             </form>
 
+
+
+
             <!-- форма для выбора колонок и запуска анализа -->
             <form method="get" action="/analyze/{{ filename }}" style="display:inline;">
                 {% set columns = name_column_upload.get(filename, []) %}
@@ -36,9 +39,12 @@
                     {% for col in columns %}
                     <option value="{{ col }}">{{ col }}</option>
                     {% endfor %}
+
                 </select>
-                            <!-- Кнопка для запуска анализа -->
+                <!-- Кнопка для запуска анализа -->
                 <button type="submit">Запустить анализ</button>
+
+
             </form>
         </div>
     {% endfor %}
@@ -64,7 +70,18 @@
     </form>
 
 <h3>Действия</h3>
-    <a href="/download_table"><button type="submit">Скачать таблицу</button> </a>
+    <a href="/download_table"><button type="submit">Загрузить для анализа</button> </a>
+{% for filename in files %}
+<div style="margin-bottom:10px;">
+    <!-- Другие элементы -->
+    <form method="post" action="/save_table">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <label for="table_name_{{ loop.index }}">Введите название таблицы:</label>
+        <input type="text" id="table_name_{{ loop.index }}" name="table_name" required>
+        <button type="submit">Сохранить в базу</button>
+    </form>
+</div>
+{% endfor %}
 
     <!-- блок для отображения анализа -->
 {% for filename in files %}
